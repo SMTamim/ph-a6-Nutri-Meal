@@ -4,7 +4,7 @@ import sendResponse from '../../utils/sendResponse';
 import { MealServices } from './meal.service';
 
 const createOne = catchAsync(async (req, res) => {
-  const result = await MealServices.createOneIntoDB(req.body);
+  const result = await MealServices.createOneIntoDB(req.user, req.body);
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
@@ -14,7 +14,7 @@ const createOne = catchAsync(async (req, res) => {
 });
 
 const getAll = catchAsync(async (req, res) => {
-  const result = await MealServices.getAllFromDB();
+  const result = await MealServices.getAllFromDB(req.query);
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
@@ -34,7 +34,11 @@ const getOne = catchAsync(async (req, res) => {
 });
 
 const updateOne = catchAsync(async (req, res) => {
-  const result = await MealServices.updateOneIntoDB(req.params.id, req.body);
+  const result = await MealServices.updateOneIntoDB(
+    req.params.id,
+    req.body,
+    req.user,
+  );
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,

@@ -1,13 +1,9 @@
-import { model, Schema, Types } from 'mongoose';
+import { model, Schema } from 'mongoose';
 import { IMeal } from './meal.interface';
 
 const mealSchema = new Schema<IMeal>(
   {
     //* meal schema fields
-
-    _id: {
-      type: Types.ObjectId,
-    },
     providerId: {
       type: Schema.Types.ObjectId,
       required: true,

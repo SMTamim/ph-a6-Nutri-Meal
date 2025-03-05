@@ -3,6 +3,7 @@ import { HomeRoutes } from '../modules/home/home.route';
 import { AuthRoutes } from '../modules/auth/auth.route';
 import { AdminRoutes } from '../modules/admin/admin.route';
 import { UserRoutes } from '../modules/user/user.route';
+import { MealRoutes } from '../modules/meal/meal.route';
 
 const router = Router();
 
@@ -28,6 +29,10 @@ const moduleRoutes = [
   {
     path: `${apiPrefix}/admin`,
     route: AdminRoutes,
+  },
+  {
+    path: `${apiPrefix}/meals`,
+    route: MealRoutes,
   },
 ];
 

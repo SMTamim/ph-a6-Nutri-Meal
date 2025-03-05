@@ -5,18 +5,52 @@ import { User } from './user.model';
 import { JwtPayload } from 'jsonwebtoken';
 import QueryBuilder from '../../builder/QueryBuilder';
 import { userSearchableFields } from './user.constant';
+import { startSession } from 'mongoose';
+import { MealProvider } from '../mealProvider/mealProvider.model';
+import { IMealProvider } from '../mealProvider/mealProvider.interface';
 
 // creates a new user to database
-const createUserIntoDB = async (payload: TUser) => {
+const createUserIntoDB = async (payload: TUser & IMealProvider) => {
   const userExists = await User.isUserExistByEmail(payload.email);
   if (userExists) {
     throw new AppError(httpStatus.BAD_REQUEST, 'User already exists');
   }
-  const result = await User.create(payload);
-  if (result) {
-    return await User.findById(result._id).select('name email');
+  const session = await startSession();
+  try {
+    session.startTransaction();
+    const result = await User.create([{ ...payload }], { session });
+    if (result.length > 0) {
+      const createdUser = result[0];
+
+      // If user is a provider, create meal provider
+      if (createdUser.role === 'provider') {
+        await MealProvider.create(
+          [
+            {
+              userId: createdUser._id,
+              cuisineSpecialties: payload.cuisineSpecialties,
+              experience: payload.experience,
+            },
+          ],
+          { session },
+        );
+      }
+
+      const user = await User.findById(createdUser._id)
+        .select('name email')
+        .session(session);
+
+      await session.commitTransaction();
+      await session.endSession();
+      return user;
+    }
+  } catch (err) {
+    // eslint-disable-next-line no-console
+    console.log(err);
+    await session.abortTransaction();
+    await session.endSession();
+    throw new AppError(httpStatus.BAD_REQUEST, 'Something went wrong');
   }
-  return result;
 };
 
 // gets all users from database

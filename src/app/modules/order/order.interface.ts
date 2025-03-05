@@ -16,6 +16,7 @@ export interface IOrder {
   deliveryAddress: string;
   deliveryTime?: string;
   instruction: string;
+  price: number;
   createdAt: string;
   updatedAt: string;
   isDeleted: boolean;

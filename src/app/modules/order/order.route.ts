@@ -6,7 +6,7 @@ import { OrderValidations } from './order.validation';
 const router = express.Router();
 
 router.post(
-  '/create',
+  '/',
   validateRequest(OrderValidations.createOrderSchema),
   OrderControllers.createOne,
 );

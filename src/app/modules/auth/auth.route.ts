@@ -16,7 +16,7 @@ router.post(
 
 router.patch(
   '/update-password',
-  auth('admin', 'user'),
+  auth('admin', 'customer', 'provider'),
   validateRequest(AuthValidations.updatePasswordValidationSchema),
   UserControllers.updatePassword,
 );

@@ -1,13 +1,10 @@
-import { model, Schema, Types } from 'mongoose';
+import { model, Schema } from 'mongoose';
 import { IOrder } from './order.interface';
 import { ORDER_STATUS } from './order.constant';
 
 const orderSchema = new Schema<IOrder>(
   {
     //* order schema fields
-    _id: {
-      type: Types.ObjectId,
-    },
     customerId: {
       type: Schema.Types.ObjectId,
       ref: 'User',
@@ -27,6 +24,10 @@ const orderSchema = new Schema<IOrder>(
       type: String,
       required: true,
       enum: [...Object.keys(ORDER_STATUS)],
+    },
+    price: {
+      type: Number,
+      required: true,
     },
     instruction: {
       type: String,

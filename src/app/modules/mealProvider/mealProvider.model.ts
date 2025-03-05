@@ -1,12 +1,9 @@
-import { model, Schema, Types } from 'mongoose';
+import { model, Schema } from 'mongoose';
 import { IMealProvider } from './mealProvider.interface';
 
 const mealProviderSchema = new Schema<IMealProvider>(
   {
     //* mealProvider schema fields
-    _id: {
-      type: Types.ObjectId,
-    },
     userId: {
       type: Schema.Types.ObjectId,
       ref: 'User',

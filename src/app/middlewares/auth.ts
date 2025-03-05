@@ -1,6 +1,10 @@
 import { TUserRole } from '../modules/user/user.interface';
 import catchAsync from '../utils/catchAsync';
-import jwt, { JwtPayload, TokenExpiredError } from 'jsonwebtoken';
+import jwt, {
+  JsonWebTokenError,
+  JwtPayload,
+  TokenExpiredError,
+} from 'jsonwebtoken';
 import config from '../config';
 import { User } from '../modules/user/user.model';
 import AuthError from '../error/AuthError';
@@ -15,6 +19,7 @@ const auth = (...requiredRoles: TUserRole[]) => {
         config.jwt_access_secret as string,
       ) as JwtPayload;
       const { email, role } = decoded;
+
       const user = await User.isUserExistByEmail(email);
       if (!user) {
         throw new AuthError('Invalid access token!');
@@ -30,9 +35,13 @@ const auth = (...requiredRoles: TUserRole[]) => {
       }
       req.user = decoded as JwtPayload;
     } catch (err) {
-      if (err instanceof TokenExpiredError) {
+      if (
+        err instanceof TokenExpiredError ||
+        err instanceof JsonWebTokenError
+      ) {
         throw new AuthError('Invalid access token!');
       }
+      throw new AuthError('Invalid access token!');
     }
     next();
   });

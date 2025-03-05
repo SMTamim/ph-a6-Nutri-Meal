@@ -1,12 +1,9 @@
-import { model, Schema, Types } from 'mongoose';
+import { model, Schema } from 'mongoose';
 import { IReview } from './review.interface';
 
 const reviewSchema = new Schema<IReview>(
   {
     //* review schema fields
-    _id: {
-      type: Types.ObjectId,
-    },
     customerId: {
       type: Schema.Types.ObjectId,
       ref: 'User',

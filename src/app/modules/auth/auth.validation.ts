@@ -6,6 +6,17 @@ const createUserValidationSchema = z.object({
     email: z.string({ required_error: 'Email is required' }),
     password: z.string({ required_error: 'Password is required' }),
     address: z.string({ required_error: 'Address is required' }),
+    role: z.enum(['customer', 'provider'], {
+      required_error: 'Role is required',
+      invalid_type_error: "Role must be either 'customer' or 'provider'",
+    }),
+    cuisineSpecialties: z
+      .array(z.string())
+      .min(1, { message: 'At least one cuisine specialty is required' })
+      .optional(),
+    experience: z
+      .string({ required_error: 'Experience is required' })
+      .optional(),
   }),
 });
 
