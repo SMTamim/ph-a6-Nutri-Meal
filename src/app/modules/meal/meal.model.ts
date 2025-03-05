@@ -21,6 +21,10 @@ const mealSchema = new Schema<IMeal>(
       type: [String],
       required: true,
     },
+    isFeatured: {
+      type: Boolean,
+      default: false,
+    },
     images: {
       type: [String],
       required: true,
