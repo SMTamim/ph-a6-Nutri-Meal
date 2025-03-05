@@ -5,6 +5,7 @@ export interface IMeal {
   name: string;
   description: string;
   ingredients: string[];
+  images: string[];
   price: number;
   isAvailable: boolean;
   isDeleted: boolean;
