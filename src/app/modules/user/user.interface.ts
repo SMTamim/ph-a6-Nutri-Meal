@@ -8,6 +8,7 @@ export interface TUser {
   email: string;
   password: string;
   role: TUserRole;
+  address: string;
   isBlocked: boolean;
   isDeleted: boolean;
   passwordUpdatedAt?: Date;

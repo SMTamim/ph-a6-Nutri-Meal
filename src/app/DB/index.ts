@@ -8,6 +8,7 @@ const adminUser: TUser = {
   email: 'admin@gmail.com',
   password: config.admin_password as string,
   role: USER_ROLE.admin,
+  address: 'admin address',
   isBlocked: false,
   isDeleted: false,
 };

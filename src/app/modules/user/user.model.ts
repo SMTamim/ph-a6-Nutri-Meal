@@ -24,6 +24,10 @@ const userSchema = new Schema<TUser>(
       required: true,
       default: 'customer',
     },
+    address: {
+      type: String,
+      required: true,
+    },
     isBlocked: {
       type: Boolean,
       default: false,
