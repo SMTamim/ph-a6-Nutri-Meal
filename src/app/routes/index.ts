@@ -4,6 +4,7 @@ import { AuthRoutes } from '../modules/auth/auth.route';
 import { AdminRoutes } from '../modules/admin/admin.route';
 import { UserRoutes } from '../modules/user/user.route';
 import { MealRoutes } from '../modules/meal/meal.route';
+import { OrderRoutes } from '../modules/order/order.route';
 
 const router = Router();
 
@@ -33,6 +34,10 @@ const moduleRoutes = [
   {
     path: `${apiPrefix}/meals`,
     route: MealRoutes,
+  },
+  {
+    path: `${apiPrefix}/orders`,
+    route: OrderRoutes,
   },
 ];
 

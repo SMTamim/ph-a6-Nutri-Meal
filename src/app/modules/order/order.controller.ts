@@ -4,7 +4,7 @@ import sendResponse from '../../utils/sendResponse';
 import { OrderServices } from './order.service';
 
 const createOne = catchAsync(async (req, res) => {
-  const result = await OrderServices.createOneIntoDB(req.body);
+  const result = await OrderServices.createOneIntoDB(req.user, req.body);
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
@@ -14,7 +14,7 @@ const createOne = catchAsync(async (req, res) => {
 });
 
 const getAll = catchAsync(async (req, res) => {
-  const result = await OrderServices.getAllFromDB();
+  const result = await OrderServices.getAllFromDB(req.user, req.query);
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
@@ -24,7 +24,7 @@ const getAll = catchAsync(async (req, res) => {
 });
 
 const getOne = catchAsync(async (req, res) => {
-  const result = await OrderServices.getOneFromDB(req.params.id);
+  const result = await OrderServices.getOneFromDB(req.user, req.params.id);
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
@@ -34,7 +34,11 @@ const getOne = catchAsync(async (req, res) => {
 });
 
 const updateOne = catchAsync(async (req, res) => {
-  const result = await OrderServices.updateOneIntoDB(req.params.id, req.body);
+  const result = await OrderServices.updateOneIntoDB(
+    req.params.id,
+    req.body,
+    req.user,
+  );
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
