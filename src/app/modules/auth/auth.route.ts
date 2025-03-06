@@ -7,11 +7,20 @@ import auth from '../../middlewares/auth';
 
 const router = Router();
 
+router.get('/me', auth('admin', 'customer', 'provider'), UserControllers.getMe);
+
 // register new user
 router.post(
   '/register',
   validateRequest(AuthValidations.createUserValidationSchema),
   UserControllers.createUser,
+);
+
+router.patch(
+  '/update-me',
+  auth('customer', 'provider'),
+  validateRequest(AuthValidations.updateMyDataValidationSchema),
+  UserControllers.updateMyData,
 );
 
 router.patch(

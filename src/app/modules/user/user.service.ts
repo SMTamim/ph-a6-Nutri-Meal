@@ -9,6 +9,18 @@ import { startSession } from 'mongoose';
 import { MealProvider } from '../mealProvider/mealProvider.model';
 import { IMealProvider } from '../mealProvider/mealProvider.interface';
 
+const getMeFromDB = async (userJWTDecoded: JwtPayload) => {
+  const user = await User.findOne({ email: userJWTDecoded.email });
+  if (user?.isBlocked) {
+    throw new AppError(httpStatus.FORBIDDEN, 'User is blocked!');
+  }
+  if (user?.isDeleted) {
+    throw new AppError(httpStatus.FORBIDDEN, 'User is deleted!');
+  }
+  if (!user?._id) throw new AppError(httpStatus.NOT_FOUND, 'User not found!');
+  return user;
+};
+
 // creates a new user to database
 const createUserIntoDB = async (payload: TUser & IMealProvider) => {
   const userExists = await User.isUserExistByEmail(payload.email);
@@ -70,6 +82,27 @@ const getAllUsersFromDB = async (
     const users = await userQuery.modelQuery;
     const meta = await userQuery.countTotal();
     return { users, meta };
+  }
+  throw new AppError(httpStatus.UNAUTHORIZED, 'Unauthorized');
+};
+
+const updateMyDataIntoDB = async (
+  userJWTDecoded: JwtPayload,
+  payload: Partial<TUser>,
+) => {
+  if (userJWTDecoded) {
+    const user = await User.isUserExistByEmail(userJWTDecoded.email);
+    if (!user) {
+      throw new AppError(httpStatus.NOT_FOUND, 'User not found');
+    }
+    if (user.isBlocked || user.isDeleted) {
+      throw new AppError(httpStatus.FORBIDDEN, 'User is blocked or deleted');
+    }
+
+    const result = await User.findOneAndUpdate({ _id: user._id }, payload, {
+      new: true,
+    });
+    return result;
   }
   throw new AppError(httpStatus.UNAUTHORIZED, 'Unauthorized');
 };
@@ -152,8 +185,10 @@ const blockUserInDB = async (id: string) => {
 };
 
 export const UserServices = {
+  getMeFromDB,
   createUserIntoDB,
   updateUserIntoDB,
+  updateMyDataIntoDB,
   updateUserPasswordIntoDB,
   getAllUsersFromDB,
   deleteUserFromDB,

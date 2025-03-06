@@ -5,6 +5,7 @@ export type TUserRole = 'customer' | 'provider' | 'admin';
 export interface TUser {
   _id?: string;
   name: string;
+  image?: string;
   email: string;
   password: string;
   role: TUserRole;

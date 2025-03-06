@@ -10,7 +10,7 @@ router.get('/', auth('admin'), UserControllers.getAllUsers);
 
 router.patch(
   '/:id',
-  auth('admin'),
+  auth('customer', 'admin', 'provider'),
   validateRequest(UserValidations.updateUserValidationSchema),
   UserControllers.updateUser,
 );

@@ -44,9 +44,17 @@ const refreshTokenValidationSchema = z.object({
   }),
 });
 
+const updateMyDataValidationSchema = z.object({
+  body: z.object({
+    name: z.string({ required_error: 'Name is required' }).optional(),
+    address: z.string({ required_error: 'Address is required' }).optional(),
+  }),
+});
+
 export const AuthValidations = {
   createUserValidationSchema,
   loginValidationSchema,
   refreshTokenValidationSchema,
   updatePasswordValidationSchema,
+  updateMyDataValidationSchema,
 };
